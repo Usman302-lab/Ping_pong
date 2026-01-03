@@ -23,12 +23,20 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if(ballX > table.offsetWidth-ball.offsetWidth || ballX <=0 ) dx*=-1; //change x-axsis direction
     if(ballY>table.offsetHeight-ball.offsetHeight || ballY <=0) dy*=-1; //change y-axsis direction
+
+
+    if(ballX<paddle.offsetLeft+paddle.offsetWidth &&
+         ballY>paddle.offsetTop && 
+         ballY+ball.offsetHeight<paddle.offsetTop+paddle.offsetHeight){
+            dx*=-1;
+         }
   }, 1);
 
   let paddleY=0; 
-  let dPy=5 //displacment of paddle in y-direction
+  let dPy=100 //displacment of paddle in y-direction
 
   document.addEventListener("keydown",(event)=>{
+    event.preventDefault();
     if(event.key==="ArrowUp" && paddleY >0){
         paddleY+=(-1)*dPy;
     }
@@ -37,5 +45,16 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     paddle.style.top=`${paddleY}px`
+  })
+
+
+  document.addEventListener("mousemove",(event)=>{
+    let mouseDistanceFromTop=event.clientY;
+    let distanceOfTableFromTop=table.offsetTop;
+    let mousePointControl=mouseDistanceFromTop-distanceOfTableFromTop-paddle.offsetHeight/2;
+    paddleY=mousePointControl;
+    if(paddleY<=0 || paddleY>table.offsetHeight-paddle.offsetHeight) return;
+    paddle.style.top=`${paddleY}px`
+
   })
 });
